@@ -14,13 +14,14 @@ export default function HomeView() {
     <S.Container>
       <S.Grid>
         {IMAGE_SOURCES.map((src, index) => (
-          <Image
-            key={src}
-            src={src}
-            alt={`homework ${index + 1}`}
-            width={200}
-            height={200}
-          />
+          <S.ImageWrapper key={src}>
+            <Image
+              src={src}
+              alt={`homework ${index + 1}`}
+              fill
+              objectFit="contain"
+            />
+          </S.ImageWrapper>
         ))}
       </S.Grid>
     </S.Container>
