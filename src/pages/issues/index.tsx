@@ -2,11 +2,11 @@ import Head from "next/head";
 
 import IssuesListView from "@/containers/issues/views/IssuesListView";
 
-export default function IssuesPage() {
+export default function IssuesListPage() {
   return (
     <>
       <Head>
-        <title>Dashboard - Issues</title>
+        <title>서비스 게시판</title>
       </Head>
 
       <IssuesListView />

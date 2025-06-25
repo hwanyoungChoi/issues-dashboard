@@ -11,7 +11,7 @@ const MENUS = [
   },
   {
     title: "서비스 게시판",
-    path: PATHS.ISSUE_LIST,
+    path: PATHS.ISSUES,
   },
 ];
 
@@ -19,7 +19,11 @@ export default function LeftNavBar() {
   const currentPath = usePathname();
 
   const getIsActive = (path: string) => {
-    return path === currentPath;
+    if (path === PATHS.HOME) {
+      return currentPath === path;
+    }
+
+    return currentPath.startsWith(path);
   };
 
   return (

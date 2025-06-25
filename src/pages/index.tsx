@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Dashboard - Home</title>
+        <title>홈</title>
       </Head>
 
       <HomeView />
