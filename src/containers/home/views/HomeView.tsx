@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { useAppStore } from "@/store/useAppStore";
 
 import * as S from "./HomeView.styled";
@@ -21,11 +19,12 @@ export default function HomeView() {
       <S.Grid>
         {images.map((src, index) => (
           <S.ImageWrapper key={src}>
-            <Image
+            <S.CustomImage
               src={src}
               alt={`homework ${index + 1}`}
               fill
-              objectFit="contain"
+              sizes="100%"
+              priority
             />
           </S.ImageWrapper>
         ))}
