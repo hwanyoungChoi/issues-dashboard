@@ -1,12 +1,15 @@
 import Head from "next/head";
 
-export default function Home() {
+import HomeView from "@/containers/home/views";
+
+export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Dashboard</title>
+        <title>Dashboard - Home</title>
       </Head>
-      <div>Home page</div>
+
+      <HomeView />
     </>
   );
 }

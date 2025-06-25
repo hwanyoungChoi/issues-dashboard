@@ -1,11 +1,37 @@
+import { usePathname } from "next/navigation";
+
+import { PATHS } from "@/lib/constants/routes";
+
 import * as S from "./LeftNavBar.styled";
 
+const MENUS = [
+  {
+    title: "홈",
+    path: PATHS.HOME,
+  },
+  {
+    title: "서비스 게시판",
+    path: PATHS.ISSUE_LIST,
+  },
+];
+
 export default function LeftNavBar() {
+  const currentPath = usePathname();
+
+  const getIsActive = (path: string) => {
+    return path === currentPath;
+  };
+
   return (
     <S.Container>
       <ul>
-        <li>홈</li>
-        <li>서비스 게시판</li>
+        {MENUS.map((menu) => (
+          <li key={menu.path}>
+            <S.CustomLink href={menu.path} isActive={getIsActive(menu.path)}>
+              {menu.title}
+            </S.CustomLink>
+          </li>
+        ))}
       </ul>
     </S.Container>
   );
