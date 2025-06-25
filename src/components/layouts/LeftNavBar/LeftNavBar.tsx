@@ -30,11 +30,9 @@ export default function LeftNavBar() {
     <S.Container>
       <ul>
         {MENUS.map((menu) => (
-          <li key={menu.path}>
-            <S.CustomLink href={menu.path} isActive={getIsActive(menu.path)}>
-              {menu.title}
-            </S.CustomLink>
-          </li>
+          <S.ListItem key={menu.path} isActive={getIsActive(menu.path)}>
+            <S.CustomLink href={menu.path}>{menu.title}</S.CustomLink>
+          </S.ListItem>
         ))}
       </ul>
     </S.Container>

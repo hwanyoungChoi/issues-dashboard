@@ -6,22 +6,18 @@ export const Container = styled.nav`
   border: 1px solid black;
   width: 200px;
   padding: 20px;
-
-  > ul {
-    > li + li {
-      margin-top: 10px;
-    }
-  }
 `;
 
-export const CustomLink = styled(Link)<{ isActive: boolean }>`
+export const ListItem = styled.li<{ isActive: boolean }>`
   ${({ isActive }) =>
     isActive &&
     css`
       border-radius: 8px;
       background-color: #888;
     `}
+`;
 
+export const CustomLink = styled(Link)`
   display: block;
   box-sizing: border-box;
   width: 100%;
