@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { useAppStore } from "@/store/useAppStore";
+
 import * as S from "./HomeView.styled";
 
 const IMAGE_SOURCES = [
@@ -10,10 +12,14 @@ const IMAGE_SOURCES = [
 ];
 
 export default function HomeView() {
+  const contentViewType = useAppStore((state) => state.contentViewType);
+  const images =
+    contentViewType === "list" ? IMAGE_SOURCES : [...IMAGE_SOURCES].reverse();
+
   return (
     <S.Container>
       <S.Grid>
-        {IMAGE_SOURCES.map((src, index) => (
+        {images.map((src, index) => (
           <S.ImageWrapper key={src}>
             <Image
               src={src}
