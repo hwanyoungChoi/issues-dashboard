@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 
+import { PAGE_PADDING_PX } from "@/lib/constants/styles";
+
 export const Container = styled.div`
   min-height: 100vh;
   height: 100vh;
@@ -15,7 +17,7 @@ export const InnerContainer = styled.div`
 
 export const ContentContainer = styled.main`
   border: 1px solid black;
-  padding: 20px;
+  padding: ${PAGE_PADDING_PX}px;
 
   flex: 1;
   min-width: 0;

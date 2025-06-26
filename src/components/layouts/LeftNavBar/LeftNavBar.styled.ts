@@ -2,6 +2,8 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import Link from "next/link";
 
+import COLORS from "@/lib/constants/colors";
+
 export const Container = styled.nav`
   border: 1px solid black;
   width: 200px;
@@ -13,7 +15,8 @@ export const ListItem = styled.li<{ isActive: boolean }>`
     isActive &&
     css`
       border-radius: 8px;
-      background-color: #888;
+      background-color: ${COLORS.N20};
+      color: ${COLORS.B10};
     `}
 `;
 
