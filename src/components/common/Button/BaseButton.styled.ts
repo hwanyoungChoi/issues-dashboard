@@ -8,6 +8,7 @@ export const Base = styled.button<ButtonProps>`
   border: 0;
   font-size: 16px;
   font-weight: 700;
+  cursor: pointer;
 
   ${(props) =>
     props.width &&

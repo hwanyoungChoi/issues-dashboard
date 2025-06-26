@@ -1,0 +1,43 @@
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+
+import COLORS from "@/lib/constants/colors";
+
+import { BaseButton } from "../Button";
+
+export const Container = styled.div`
+  position: relative;
+`;
+
+export const Button = styled(BaseButton)<{ isActive: boolean }>`
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      background-color: ${COLORS.N20};
+    `}
+`;
+
+export const MenuContainer = styled.div<{ direction: "left" | "right" }>`
+  position: absolute;
+  width: auto;
+  display: inline-block;
+  min-width: 120px;
+  top: 100%;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 1000;
+
+  ${({ direction }) => (direction === "left" ? "left: 0;" : "right: 0")}
+`;
+
+export const MenuList = styled.ul`
+  > li {
+    cursor: pointer;
+  }
+
+  > li + li {
+    margin-top: 10px;
+  }
+`;
