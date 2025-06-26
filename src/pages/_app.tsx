@@ -1,8 +1,10 @@
+import { QueryClientProvider } from "@tanstack/react-query";
 import Head from "next/head";
 
-import DashboardLayout from "@/components/layouts/DashboardLayout";
-
 import "@/styles/globals.css";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
+import queryClient from "@/lib/api/queryClient";
+
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -13,9 +15,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <DashboardLayout>
-        <Component {...pageProps} />
-      </DashboardLayout>
+      <QueryClientProvider client={queryClient}>
+        <DashboardLayout>
+          <Component {...pageProps} />
+        </DashboardLayout>
+      </QueryClientProvider>
     </>
   );
 }
