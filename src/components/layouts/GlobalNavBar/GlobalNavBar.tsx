@@ -1,4 +1,7 @@
-import { useAppStore } from "@/store/useAppStore";
+import Image from "next/image";
+
+import DropDown from "@/components/common/DropDown";
+import { TContentViewType, useAppStore } from "@/store/useAppStore";
 
 import * as S from "./GlobalNavBar.styled";
 
@@ -11,27 +14,22 @@ export default function GlobalNavBar() {
       <h1>Dashboard</h1>
 
       <S.MenuContainer>
-        {/* TODO: popover 형태로 개발 */}
-        <label>
-          리스트 보기
-          <input
-            type="radio"
-            name="contentViewType"
-            value="list"
-            checked={contentViewType === "list"}
-            onChange={() => setContentViewType("list")}
-          />
-        </label>
-        <label>
-          카드 보기
-          <input
-            type="radio"
-            name="contentViewType"
-            value="card"
-            checked={contentViewType === "card"}
-            onChange={() => setContentViewType("card")}
-          />
-        </label>
+        <DropDown
+          buttonLabel={
+            <Image
+              src="/assets/icons/ic_setting.png"
+              alt="콘텐츠 보기 옵션"
+              width={24}
+              height={24}
+            />
+          }
+          items={[
+            { label: "리스트 보기", value: "list" },
+            { label: "카드 보기", value: "card" },
+          ]}
+          selectedValue={contentViewType}
+          onClick={(value) => setContentViewType(value as TContentViewType)}
+        />
       </S.MenuContainer>
     </S.Container>
   );
