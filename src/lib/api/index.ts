@@ -10,6 +10,9 @@ export type GetIssuesResponse =
 export async function getIssues(
   params: GetIssuesParams
 ): Promise<GetIssuesResponse["data"]> {
-  const { data } = await octokit.rest.issues.listForRepo(params);
+  const { data } = await octokit.request(
+    "GET /repos/{owner}/{repo}/issues",
+    params
+  );
   return data;
 }

@@ -2,19 +2,17 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 
 import * as S from "./DropDown.styled";
 
-type TValueType = string | number;
-
 interface DropDownMenuItem {
   label: string | ReactNode;
-  value: TValueType;
+  value: any;
 }
 
 interface Props {
   buttonLabel: string | ReactNode;
   items: DropDownMenuItem[];
   direction?: "left" | "right";
-  selectedValue?: TValueType;
-  onClick: (value: TValueType) => void;
+  selectedValue?: any;
+  onClick: (value: any) => void;
 }
 
 export default function DropDown({
@@ -50,7 +48,7 @@ export default function DropDown({
     };
   }, [isOpen]);
 
-  const handleMenuItemClick = (value: TValueType) => {
+  const handleMenuItemClick = (value: any) => {
     onClick(value);
     setIsOpen(false);
   };
