@@ -1,5 +1,7 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 
+import { DATE_FORMAT } from "@/lib/constants/date";
 import { PATHS } from "@/lib/constants/routes";
 
 import * as S from "./CardTypeList.styled";
@@ -20,7 +22,9 @@ export default function CardTypeList({ issues, onDropDownClick }: Props) {
           </S.CardTitle>
           <S.CardDetail>
             <div>{issue.user?.login}</div>
-            <div>{issue.created_at}</div>
+            <div>
+              {dayjs(issue.created_at).format(DATE_FORMAT.YYYYMMDD_HHmmss)}
+            </div>
           </S.CardDetail>
 
           <S.CardMoreWrapper>

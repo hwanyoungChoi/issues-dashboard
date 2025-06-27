@@ -1,5 +1,7 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 
+import { DATE_FORMAT } from "@/lib/constants/date";
 import { PATHS } from "@/lib/constants/routes";
 
 import * as S from "./TableTypeList.styled";
@@ -7,7 +9,7 @@ import ListMoreDropDown, { MoreAction } from "../ListMoreDropDown";
 
 interface Props {
   issues: any[];
-  onDropDownClick: (id: number, action: MoreAction) => void;
+  onDropDownClick: (issueNumber: number, action: MoreAction) => void;
 }
 
 export default function TableTypeList({ issues, onDropDownClick }: Props) {
@@ -39,7 +41,9 @@ export default function TableTypeList({ issues, onDropDownClick }: Props) {
               </Link>
             </td>
             <td>{issue.user?.login}</td>
-            <td>{issue.created_at}</td>
+            <td>
+              {dayjs(issue.created_at).format(DATE_FORMAT.YYYYMMDD_HHmmss)}
+            </td>
             <td>
               <ListMoreDropDown
                 onClick={(action) => onDropDownClick(issue.number, action)}
