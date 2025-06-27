@@ -2,11 +2,12 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 import COLORS from "@/lib/constants/colors";
+import { Z_INDEX } from "@/lib/constants/styles";
 
 import BaseButton from "./BaseButton";
 
 export const Base = styled(BaseButton)`
-  border-radius: 30px;
+  border-radius: 8px;
   padding: 8px 12px;
 
   ${({ size }) => {
@@ -49,5 +50,5 @@ export const DisabledLayer = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.68);
-  z-index: 1;
+  z-index: ${Z_INDEX.PRIORITY};
 `;

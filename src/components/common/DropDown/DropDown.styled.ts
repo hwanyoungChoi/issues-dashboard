@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 import COLORS from "@/lib/constants/colors";
+import { Z_INDEX } from "@/lib/constants/styles";
 
 import { BaseButton } from "../Button";
 
@@ -13,7 +14,7 @@ export const Button = styled(BaseButton)<{ isActive: boolean }>`
   ${({ isActive }) =>
     isActive &&
     css`
-      background-color: ${COLORS.N20};
+      background-color: ${COLORS.R10};
     `}
 `;
 
@@ -27,7 +28,7 @@ export const MenuContainer = styled.div<{ direction: "left" | "right" }>`
   border: 1px solid black;
   border-radius: 8px;
   padding: 10px;
-  z-index: 1000;
+  z-index: ${Z_INDEX.DROPDOWN};
 
   ${({ direction }) => (direction === "left" ? "left: 0;" : "right: 0")}
 `;
