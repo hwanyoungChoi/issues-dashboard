@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { useGetIssuesSuspense } from "@/hooks/queries/useGetIssuesSuspense";
+import { useGetSearchIssuesSuspense } from "@/hooks/queries/useGetSearchIssuesSuspense";
 import { PATHS } from "@/lib/constants/routes";
 import { useAppStore } from "@/store/useAppStore";
 
@@ -14,8 +15,12 @@ import TableTypeList from "../../components/TableTypeList";
 
 export default function IssuesListView() {
   const router = useRouter();
+  const contentViewType = useAppStore((state) => state.contentViewType);
 
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { data: issues } = useGetIssuesSuspense({
     owner: process.env.NEXT_PUBLIC_OWNER!,
@@ -24,9 +29,17 @@ export default function IssuesListView() {
     per_page: 10,
   });
 
-  const contentViewType = useAppStore((state) => state.contentViewType);
+  const { data: issuesDataBySearch } = useGetSearchIssuesSuspense({
+    owner: process.env.NEXT_PUBLIC_OWNER!,
+    repo: process.env.NEXT_PUBLIC_REPO!,
+    title: search,
+    page,
+    per_page: 10,
+  });
 
-  const isEmptyList = page === 1 && !issues.length;
+  const issueList = search ? issuesDataBySearch?.items ?? [] : issues;
+
+  const isEmptyList = page === 1 && !issueList.length;
 
   const handleDropDownClick = (issueNumber: number, action: MoreAction) => {
     if (action === MoreAction.Update) {
@@ -37,12 +50,29 @@ export default function IssuesListView() {
     }
   };
 
+  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearch(inputRef.current?.value.trim() ?? "");
+  };
+
   return (
     <S.Container>
       <h2>서비스 게시판</h2>
 
       <S.Head>
-        <div>Input Area</div>
+        <div>
+          <form onSubmit={handleSearch}>
+            <input
+              ref={inputRef}
+              type="text"
+              defaultValue={search}
+              placeholder="검색어를 입력하세요."
+            />
+            <Button type="submit" size="small">
+              검색
+            </Button>
+          </form>
+        </div>
 
         <Link href={PATHS.ISSUES_EDIT}>
           <Button theme="primary">등록</Button>
@@ -56,13 +86,13 @@ export default function IssuesListView() {
           <>
             {contentViewType === "list" && (
               <TableTypeList
-                issues={issues}
+                issues={issueList}
                 onDropDownClick={handleDropDownClick}
               />
             )}
             {contentViewType === "card" && (
               <CardTypeList
-                issues={issues}
+                issues={issueList}
                 onDropDownClick={handleDropDownClick}
               />
             )}
