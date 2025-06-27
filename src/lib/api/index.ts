@@ -9,12 +9,8 @@ export type GetIssuesResponse =
 
 export async function getIssues(
   params: GetIssuesParams
-): Promise<GetIssuesResponse["data"]> {
-  const { data } = await octokit.request(
-    "GET /repos/{owner}/{repo}/issues",
-    params
-  );
-  return data;
+): Promise<GetIssuesResponse> {
+  return await octokit.request("GET /repos/{owner}/{repo}/issues", params);
 }
 
 export type GetSearchIssuesParams =
@@ -24,9 +20,8 @@ export type GetSearchIssuesResponse =
 
 export async function searchIssues(
   params: GetSearchIssuesParams
-): Promise<GetSearchIssuesResponse["data"]> {
-  const { data } = await octokit.request("GET /search/issues", params);
-  return data;
+): Promise<GetSearchIssuesResponse> {
+  return await octokit.request("GET /search/issues", params);
 }
 
 export type GetIssueParams =
@@ -36,12 +31,11 @@ export type GetIssueResponse =
 
 export async function getIssue(
   params: GetIssueParams
-): Promise<GetIssueResponse["data"]> {
-  const { data } = await octokit.request(
+): Promise<GetIssueResponse> {
+  return await octokit.request(
     "GET /repos/{owner}/{repo}/issues/{issue_number}",
     params
   );
-  return data;
 }
 
 export type PostIssueParams =
@@ -51,12 +45,8 @@ export type PostIssueResponse =
 
 export async function postIssue(
   params: PostIssueParams
-): Promise<PostIssueResponse["data"]> {
-  const { data } = await octokit.request(
-    "POST /repos/{owner}/{repo}/issues",
-    params
-  );
-  return data;
+): Promise<PostIssueResponse> {
+  return await octokit.request("POST /repos/{owner}/{repo}/issues", params);
 }
 
 export type PatchIssueParams =
@@ -66,10 +56,9 @@ export type PatchIssueResponse =
 
 export async function patchIssue(
   params: PatchIssueParams
-): Promise<PatchIssueResponse["data"]> {
-  const { data } = await octokit.request(
+): Promise<PatchIssueResponse> {
+  return await octokit.request(
     "PATCH /repos/{owner}/{repo}/issues/{issue_number}",
     params
   );
-  return data;
 }
