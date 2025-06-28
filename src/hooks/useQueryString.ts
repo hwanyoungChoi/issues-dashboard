@@ -1,21 +1,30 @@
 import { useRouter } from "next/router";
 
 interface UseQueryStringProps {
-  key: string;
-  value: string;
+  initialQueries: Record<string, string>;
 }
 
-export function useQueryString({ key, value }: UseQueryStringProps) {
+export function useQueryString({ initialQueries }: UseQueryStringProps) {
   const router = useRouter();
 
-  const query = (router.query[key] as string) ?? value;
+  const queries: Record<string, string> = {};
+  for (const key in initialQueries) {
+    const value = router.query[key];
+    if (typeof value === "string") {
+      queries[key] = value;
+    } else if (Array.isArray(value)) {
+      queries[key] = value[0] ?? initialQueries[key];
+    } else {
+      queries[key] = initialQueries[key];
+    }
+  }
 
-  const setQuery = (value: string, isReplace?: boolean) => {
+  const setQueries = (queries: Record<string, string>, isReplace?: boolean) => {
     const route = {
       pathname: router.pathname,
       query: {
         ...router.query,
-        [key]: value,
+        ...queries,
       },
     };
 
@@ -27,5 +36,5 @@ export function useQueryString({ key, value }: UseQueryStringProps) {
     router.push(route);
   };
 
-  return { query, setQuery };
+  return { queries, setQueries };
 }
