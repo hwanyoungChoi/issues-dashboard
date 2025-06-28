@@ -1,5 +1,9 @@
 import * as S from "./Loading.styled";
 
-export default function Loading() {
-  return <S.Loading>Loading...</S.Loading>;
+interface Props {
+  message?: string;
+}
+
+export default function Loading({ message }: Props) {
+  return <S.Loading>{message ?? "Loading..."}</S.Loading>;
 }

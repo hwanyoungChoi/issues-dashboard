@@ -5,14 +5,14 @@ import { getIssue, GetIssueParams, GetIssueResponse } from "@/lib/api";
 export type UseGetIssueProps = GetIssueParams;
 
 export const useGetIssue = (
-  { owner, repo, issue_number }: UseGetIssueProps,
+  params: UseGetIssueProps,
   options?: UseQueryOptions<GetIssueResponse>
 ) => {
   return useQuery({
     ...options,
-    queryKey: ["get-issue", owner, repo, issue_number],
-    queryFn: () => getIssue({ owner, repo, issue_number }),
+    queryKey: ["get-issue", params.issue_number],
+    queryFn: () => getIssue(params),
     select: (res) => res.data,
-    enabled: !!issue_number,
+    enabled: !!params.issue_number,
   });
 };

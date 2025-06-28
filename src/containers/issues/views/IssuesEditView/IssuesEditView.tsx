@@ -5,6 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import { Button } from "@/components/common/Button";
+import Loading from "@/components/common/Loading";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { usePostIssue } from "@/hooks/mutations/usePostIssue";
 import { useGetIssue } from "@/hooks/queries/useGetIssue";
@@ -32,14 +33,15 @@ export default function IssuesEditView({ id }: Props) {
 
   const isUpdate = !!id;
 
-  const { data: issue } = useGetIssue({
+  const { data: issue, isLoading } = useGetIssue({
     owner: process.env.NEXT_PUBLIC_OWNER!,
     repo: process.env.NEXT_PUBLIC_REPO!,
     issue_number: id!,
   });
 
-  const { mutateAsync: postIssueAsync } = usePostIssue();
-  const { mutateAsync: patchIssueAsync } = usePatchIssue();
+  const { mutateAsync: postIssueAsync, isPending: isPosting } = usePostIssue();
+  const { mutateAsync: patchIssueAsync, isPending: isPatching } =
+    usePatchIssue();
 
   const methods = useForm<IssueForm>({
     resolver: yupResolver(SCHEMA),
@@ -75,6 +77,15 @@ export default function IssuesEditView({ id }: Props) {
 
     router.replace(PATHS.ISSUES);
   };
+
+  console.log(isLoading, "dd");
+
+  if (isLoading) {
+    return <Loading message="게시글을 불러오는 중입니다." />;
+  }
+  if (isPosting || isPatching) {
+    return <Loading message="게시글을 등록/수정하는 중입니다." />;
+  }
 
   return (
     <S.Container>

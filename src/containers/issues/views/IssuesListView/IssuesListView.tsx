@@ -4,9 +4,10 @@ import { FormEvent, useRef } from "react";
 
 import { Button } from "@/components/common/Button";
 import Input from "@/components/common/Input";
+import Loading from "@/components/common/Loading";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
-import { useGetIssuesSuspense } from "@/hooks/queries/useGetIssuesSuspense";
-import { useGetSearchIssuesSuspense } from "@/hooks/queries/useGetSearchIssuesSuspense";
+import { useGetIssues } from "@/hooks/queries/useGetIssues";
+import { useGetSearchIssues } from "@/hooks/queries/useGetSearchIssues";
 import { useQueryString } from "@/hooks/useQueryString";
 import { PATHS } from "@/lib/constants/routes";
 import { useAppStore } from "@/store/useAppStore";
@@ -32,24 +33,26 @@ export default function IssuesListView() {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data: issues } = useGetIssuesSuspense({
+  const { data: issues, isLoading } = useGetIssues({
     owner: process.env.NEXT_PUBLIC_OWNER!,
     repo: process.env.NEXT_PUBLIC_REPO!,
     page: Number(page),
     per_page: 10,
   });
 
-  const { data: issuesDataBySearch } = useGetSearchIssuesSuspense({
-    owner: process.env.NEXT_PUBLIC_OWNER!,
-    repo: process.env.NEXT_PUBLIC_REPO!,
-    title: search,
-    page: Number(page),
-    per_page: 10,
-  });
+  const { data: issuesDataBySearch, isLoading: isSearching } =
+    useGetSearchIssues({
+      owner: process.env.NEXT_PUBLIC_OWNER!,
+      repo: process.env.NEXT_PUBLIC_REPO!,
+      title: search,
+      page: Number(page),
+      per_page: 10,
+    });
 
-  const { mutateAsync: patchIssueAsync } = usePatchIssue();
+  const { mutateAsync: patchIssueAsync, isPending: isPatching } =
+    usePatchIssue();
 
-  const issueList = search ? issuesDataBySearch?.items ?? [] : issues;
+  const issueList = search ? issuesDataBySearch?.items ?? [] : issues ?? [];
 
   const isEmptyList = Number(page) === 1 && !issueList.length;
 
@@ -76,6 +79,13 @@ export default function IssuesListView() {
       search: inputRef.current?.value.trim() ?? "",
     });
   };
+
+  if (isLoading || isSearching) {
+    return <Loading message="게시글을 불러오는 중입니다." />;
+  }
+  if (isPatching) {
+    return <Loading message="게시글을 삭제하는 중입니다." />;
+  }
 
   return (
     <S.Container>

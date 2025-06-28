@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { Button } from "@/components/common/Button";
+import Loading from "@/components/common/Loading";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { useGetIssue } from "@/hooks/queries/useGetIssue";
 import { DATE_FORMAT } from "@/lib/constants/date";
@@ -20,13 +21,14 @@ interface Props {
 export default function IssuesDetailView({ id }: Props) {
   const router = useRouter();
 
-  const { data: issue } = useGetIssue({
+  const { data: issue, isLoading } = useGetIssue({
     owner: process.env.NEXT_PUBLIC_OWNER!,
     repo: process.env.NEXT_PUBLIC_REPO!,
     issue_number: id,
   });
 
-  const { mutateAsync: patchIssueAsync } = usePatchIssue();
+  const { mutateAsync: patchIssueAsync, isPending: isPatching } =
+    usePatchIssue();
 
   const { title, created_at, body } = issue ?? {};
 
@@ -44,6 +46,13 @@ export default function IssuesDetailView({ id }: Props) {
       await router.replace(PATHS.ISSUES);
     }
   };
+
+  if (isLoading) {
+    return <Loading message="게시글을 불러오는 중입니다." />;
+  }
+  if (isPatching) {
+    return <Loading message="게시글을 삭제하는 중입니다." />;
+  }
 
   return (
     <S.Container>
