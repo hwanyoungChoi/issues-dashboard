@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { Button } from "@/components/common/Button";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
-import { useGetIssueSuspense } from "@/hooks/queries/useGetIssueSuspense";
+import { useGetIssue } from "@/hooks/queries/useGetIssue";
 import { DATE_FORMAT } from "@/lib/constants/date";
 import { PATHS } from "@/lib/constants/routes";
 
@@ -20,7 +20,7 @@ interface Props {
 export default function IssuesDetailView({ id }: Props) {
   const router = useRouter();
 
-  const { data: issue } = useGetIssueSuspense({
+  const { data: issue } = useGetIssue({
     owner: process.env.NEXT_PUBLIC_OWNER!,
     repo: process.env.NEXT_PUBLIC_REPO!,
     issue_number: id,
@@ -28,7 +28,7 @@ export default function IssuesDetailView({ id }: Props) {
 
   const { mutateAsync: patchIssueAsync } = usePatchIssue();
 
-  const { title, created_at, body } = issue;
+  const { title, created_at, body } = issue ?? {};
 
   const handleDropDownClick = async (action: MoreAction) => {
     if (action === MoreAction.Update) {

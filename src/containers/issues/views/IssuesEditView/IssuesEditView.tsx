@@ -1,14 +1,22 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import { Button } from "@/components/common/Button";
+import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { usePostIssue } from "@/hooks/mutations/usePostIssue";
+import { useGetIssue } from "@/hooks/queries/useGetIssue";
 import { PATHS } from "@/lib/constants/routes";
 
 import * as S from "./IssuesEditView.styled";
 import FormFields from "../../components/FormFields";
+
+interface IssueForm {
+  title: string;
+  body: string;
+}
 
 const SCHEMA = yup.object().shape({
   title: yup.string().required("타이틀을 입력해주세요."),
@@ -22,20 +30,47 @@ interface Props {
 export default function IssuesEditView({ id }: Props) {
   const router = useRouter();
 
-  const { mutateAsync: postIssueAsync } = usePostIssue();
+  const isUpdate = !!id;
 
-  const methods = useForm({
+  const { data: issue } = useGetIssue({
+    owner: process.env.NEXT_PUBLIC_OWNER!,
+    repo: process.env.NEXT_PUBLIC_REPO!,
+    issue_number: id!,
+  });
+
+  const { mutateAsync: postIssueAsync } = usePostIssue();
+  const { mutateAsync: patchIssueAsync } = usePatchIssue();
+
+  const methods = useForm<IssueForm>({
     resolver: yupResolver(SCHEMA),
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
-  const onCreate = async (data: any) => {
+  useEffect(() => {
+    reset({
+      title: issue?.title ?? "",
+      body: issue?.body ?? "",
+    });
+  }, [issue, reset]);
+
+  const onCreate = async (data: IssueForm) => {
     await postIssueAsync({
       owner: process.env.NEXT_PUBLIC_OWNER!,
       repo: process.env.NEXT_PUBLIC_REPO!,
       title: data.title,
       body: data.body,
-      issue_number: id,
+    });
+
+    router.replace(PATHS.ISSUES);
+  };
+
+  const onUpdate = async (data: IssueForm) => {
+    await patchIssueAsync({
+      owner: process.env.NEXT_PUBLIC_OWNER!,
+      repo: process.env.NEXT_PUBLIC_REPO!,
+      issue_number: id!,
+      title: data.title,
+      body: data.body,
     });
 
     router.replace(PATHS.ISSUES);
@@ -43,14 +78,14 @@ export default function IssuesEditView({ id }: Props) {
 
   return (
     <S.Container>
-      <h2>게시글 등록</h2>
+      <h2>{isUpdate ? "게시글 수정" : "게시글 등록"}</h2>
 
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onCreate)}>
+        <form onSubmit={handleSubmit(isUpdate ? onUpdate : onCreate)}>
           <FormFields />
 
           <S.ActionContainer>
-            <Button type="submit">등록하기</Button>
+            <Button type="submit">{isUpdate ? "수정하기" : "등록하기"}</Button>
           </S.ActionContainer>
         </form>
       </FormProvider>
