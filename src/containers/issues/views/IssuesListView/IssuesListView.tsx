@@ -4,6 +4,7 @@ import { FormEvent, useRef } from "react";
 
 import { Button } from "@/components/common/Button";
 import Input from "@/components/common/Input";
+import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { useGetIssuesSuspense } from "@/hooks/queries/useGetIssuesSuspense";
 import { useGetSearchIssuesSuspense } from "@/hooks/queries/useGetSearchIssuesSuspense";
 import { useQueryString } from "@/hooks/useQueryString";
@@ -46,16 +47,25 @@ export default function IssuesListView() {
     per_page: 10,
   });
 
+  const { mutateAsync: patchIssueAsync } = usePatchIssue();
+
   const issueList = search ? issuesDataBySearch?.items ?? [] : issues;
 
   const isEmptyList = Number(page) === 1 && !issueList.length;
 
-  const handleDropDownClick = (issueNumber: number, action: MoreAction) => {
+  const handleDropDownClick = async (
+    issueNumber: number,
+    action: MoreAction
+  ) => {
     if (action === MoreAction.Update) {
-      router.push(`${PATHS.ISSUES_EDIT}/${issueNumber}`);
+      await router.push(`${PATHS.ISSUES_EDIT}/${issueNumber}`);
     } else if (action === MoreAction.Delete) {
-      // TODO: 삭제 API 연동
-      console.log("delete", issueNumber);
+      await patchIssueAsync({
+        owner: process.env.NEXT_PUBLIC_OWNER!,
+        repo: process.env.NEXT_PUBLIC_REPO!,
+        issue_number: issueNumber,
+        state: "closed",
+      });
     }
   };
 

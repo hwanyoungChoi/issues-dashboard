@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { Button } from "@/components/common/Button";
+import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { useGetIssueSuspense } from "@/hooks/queries/useGetIssueSuspense";
 import { DATE_FORMAT } from "@/lib/constants/date";
 import { PATHS } from "@/lib/constants/routes";
@@ -25,13 +26,22 @@ export default function IssuesDetailView({ id }: Props) {
     issue_number: id,
   });
 
+  const { mutateAsync: patchIssueAsync } = usePatchIssue();
+
   const { title, created_at, body } = issue;
 
-  const handleDropDownClick = (action: MoreAction) => {
+  const handleDropDownClick = async (action: MoreAction) => {
     if (action === MoreAction.Update) {
-      router.push(`${PATHS.ISSUES_EDIT}/${id}`);
+      await router.push(`${PATHS.ISSUES_EDIT}/${id}`);
     } else if (action === MoreAction.Delete) {
-      // TODO: 삭제 API 연동
+      await patchIssueAsync({
+        owner: process.env.NEXT_PUBLIC_OWNER!,
+        repo: process.env.NEXT_PUBLIC_REPO!,
+        issue_number: id,
+        state: "closed",
+      });
+
+      await router.replace(PATHS.ISSUES);
     }
   };
 
