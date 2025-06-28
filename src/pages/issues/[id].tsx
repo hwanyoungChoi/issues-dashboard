@@ -9,7 +9,9 @@ export default function IssuesDetailPage() {
 
   return (
     <>
-      <Head>게시글 상세 - {id}</Head>
+      <Head>
+        <title>게시글 상세 - {id}</title>
+      </Head>
 
       <IssuesDetailView id={Number(id)} />
     </>
