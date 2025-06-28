@@ -26,7 +26,16 @@ export default function ListMoreDropDown({ onClick }: Props) {
         { label: "수정", value: MoreAction.Update },
         { label: "삭제", value: MoreAction.Delete },
       ]}
-      onClick={onClick}
+      onClick={(action) => {
+        if (action === MoreAction.Delete) {
+          // TODO: modal 컴포넌트
+          if (!window.confirm("게시글을 삭제하시겠습니까?")) {
+            return;
+          }
+        }
+
+        onClick(action);
+      }}
     />
   );
 }
