@@ -1,5 +1,7 @@
 import { useFormContext } from "react-hook-form";
 
+import Input from "@/components/common/Input";
+
 import * as S from "./FormFields.styled";
 
 export default function FormFields() {
@@ -10,8 +12,11 @@ export default function FormFields() {
 
   return (
     <S.Container>
-      <input {...register("title")} type="text" />
-      {errors.title && <p>{errors.title.message as string}</p>}
+      <Input
+        {...register("title")}
+        type="text"
+        errorMessage={errors.title?.message as string}
+      />
 
       <textarea {...register("body")} rows={10} />
       {errors.body && <p>{errors.body.message as string}</p>}

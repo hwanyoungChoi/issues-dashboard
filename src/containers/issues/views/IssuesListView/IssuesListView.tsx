@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { FormEvent, useRef } from "react";
 
 import { Button } from "@/components/common/Button";
+import Input from "@/components/common/Input";
 import { useGetIssuesSuspense } from "@/hooks/queries/useGetIssuesSuspense";
 import { useGetSearchIssuesSuspense } from "@/hooks/queries/useGetSearchIssuesSuspense";
 import { useQueryString } from "@/hooks/useQueryString";
@@ -73,15 +74,14 @@ export default function IssuesListView() {
       <S.Head>
         <div>
           <form onSubmit={handleSearch}>
-            <input
+            <Input
               ref={inputRef}
               type="text"
               defaultValue={search}
               placeholder="검색어를 입력하세요."
+              hasSubmitButton
+              submitButtonLabel="🔍"
             />
-            <Button type="submit" size="small">
-              검색
-            </Button>
           </form>
         </div>
 
