@@ -7,6 +7,7 @@ import { Z_INDEX } from "@/lib/constants/styles";
 import BaseButton from "./BaseButton";
 
 export const Base = styled(BaseButton)`
+  position: relative;
   border-radius: 8px;
   padding: 8px 12px;
 
@@ -46,6 +47,7 @@ export const Base = styled(BaseButton)`
 export const DisabledLayer = styled.div`
   position: absolute;
   top: 0;
+  left: 0;
   border-radius: inherit;
   width: 100%;
   height: 100%;

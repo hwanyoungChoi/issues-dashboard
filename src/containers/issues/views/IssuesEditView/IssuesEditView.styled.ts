@@ -8,6 +8,7 @@ export const Container = styled.div`
 `;
 
 export const ActionContainer = styled.div`
+  margin-top: 10px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

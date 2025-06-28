@@ -18,6 +18,13 @@ export const InnerContainer = styled.div`
   margin-top: 60px;
 `;
 
+export const ActionContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
 export const Empty = styled.div`
   height: 200px;
   display: flex;

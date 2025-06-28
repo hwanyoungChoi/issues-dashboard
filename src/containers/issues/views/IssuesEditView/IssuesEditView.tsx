@@ -78,8 +78,6 @@ export default function IssuesEditView({ id }: Props) {
     router.replace(PATHS.ISSUES);
   };
 
-  console.log(isLoading, "dd");
-
   if (isLoading) {
     return <Loading message="게시글을 불러오는 중입니다." />;
   }
@@ -96,7 +94,9 @@ export default function IssuesEditView({ id }: Props) {
           <FormFields />
 
           <S.ActionContainer>
-            <Button type="submit">{isUpdate ? "수정하기" : "등록하기"}</Button>
+            <Button theme="primary" type="submit">
+              {isUpdate ? "수정하기" : "등록하기"}
+            </Button>
           </S.ActionContainer>
         </form>
       </FormProvider>

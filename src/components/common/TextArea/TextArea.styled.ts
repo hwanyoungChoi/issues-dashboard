@@ -26,7 +26,6 @@ export const TextAreaContainer = styled.div<{
 export const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
-  line-height: 28px;
   border: none;
   outline: none;
 `;

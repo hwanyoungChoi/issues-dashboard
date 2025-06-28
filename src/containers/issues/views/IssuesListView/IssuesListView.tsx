@@ -130,13 +130,19 @@ export default function IssuesListView() {
           </>
         )}
 
-        {/* TODO: 페이지네이션 */}
-        <Button onClick={() => setQueries({ page: String(Number(page) - 1) })}>
-          전페이지
-        </Button>
-        <Button onClick={() => setQueries({ page: String(Number(page) + 1) })}>
-          다음페이지
-        </Button>
+        <S.ActionContainer>
+          {/* TODO: 페이지네이션 */}
+          <Button
+            onClick={() => setQueries({ page: String(Number(page) - 1) })}
+          >
+            전페이지
+          </Button>
+          <Button
+            onClick={() => setQueries({ page: String(Number(page) + 1) })}
+          >
+            다음페이지
+          </Button>
+        </S.ActionContainer>
       </S.InnerContainer>
     </S.Container>
   );

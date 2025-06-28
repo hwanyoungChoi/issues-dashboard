@@ -8,12 +8,21 @@ import { BaseButton } from "../Button";
 
 export const Container = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Button = styled(BaseButton)<{ isActive: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+
   ${({ isActive }) =>
     isActive &&
     css`
+      border-radius: 8px;
       background-color: ${COLORS.R10};
     `}
 `;

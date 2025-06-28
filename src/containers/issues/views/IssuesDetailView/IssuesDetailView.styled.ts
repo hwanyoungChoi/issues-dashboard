@@ -33,6 +33,7 @@ export const Date = styled.div`
 
 export const Content = styled.div`
   min-height: 300px;
+  white-space: pre-wrap;
 `;
 
 export const ActionContainer = styled.div`
