@@ -1,4 +1,4 @@
-import { QueryClientProvider } from "@tanstack/react-query";
+import { HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
 import Head from "next/head";
 
 import "@/styles/globals.css";
@@ -16,9 +16,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <DashboardLayout>
-          <Component {...pageProps} />
-        </DashboardLayout>
+        <HydrationBoundary state={pageProps.dehydratedState}>
+          <DashboardLayout>
+            <Component {...pageProps} />
+          </DashboardLayout>
+        </HydrationBoundary>
       </QueryClientProvider>
     </>
   );
