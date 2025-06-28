@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useRef } from "react";
 
 import { Button } from "@/components/common/Button";
 import { useGetIssuesSuspense } from "@/hooks/queries/useGetIssuesSuspense";
 import { useGetSearchIssuesSuspense } from "@/hooks/queries/useGetSearchIssuesSuspense";
+import { useQueryString } from "@/hooks/useQueryString";
 import { PATHS } from "@/lib/constants/routes";
 import { useAppStore } from "@/store/useAppStore";
 
@@ -17,15 +18,22 @@ export default function IssuesListView() {
   const router = useRouter();
   const contentViewType = useAppStore((state) => state.contentViewType);
 
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const {
+    queries: { page, search },
+    setQueries,
+  } = useQueryString({
+    initialQueries: {
+      page: "1",
+      search: "",
+    },
+  });
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { data: issues } = useGetIssuesSuspense({
     owner: process.env.NEXT_PUBLIC_OWNER!,
     repo: process.env.NEXT_PUBLIC_REPO!,
-    page,
+    page: Number(page),
     per_page: 10,
   });
 
@@ -33,13 +41,13 @@ export default function IssuesListView() {
     owner: process.env.NEXT_PUBLIC_OWNER!,
     repo: process.env.NEXT_PUBLIC_REPO!,
     title: search,
-    page,
+    page: Number(page),
     per_page: 10,
   });
 
   const issueList = search ? issuesDataBySearch?.items ?? [] : issues;
 
-  const isEmptyList = page === 1 && !issueList.length;
+  const isEmptyList = Number(page) === 1 && !issueList.length;
 
   const handleDropDownClick = (issueNumber: number, action: MoreAction) => {
     if (action === MoreAction.Update) {
@@ -52,7 +60,10 @@ export default function IssuesListView() {
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSearch(inputRef.current?.value.trim() ?? "");
+    setQueries({
+      page: "1", // 검색 시에는 1페이지부터 다시 조회
+      search: inputRef.current?.value.trim() ?? "",
+    });
   };
 
   return (
@@ -100,8 +111,12 @@ export default function IssuesListView() {
         )}
 
         {/* TODO: 페이지네이션 */}
-        <Button onClick={() => setPage(page - 1)}>전페이지</Button>
-        <Button onClick={() => setPage(page + 1)}>다음페이지</Button>
+        <Button onClick={() => setQueries({ page: String(Number(page) - 1) })}>
+          전페이지
+        </Button>
+        <Button onClick={() => setQueries({ page: String(Number(page) + 1) })}>
+          다음페이지
+        </Button>
       </S.InnerContainer>
     </S.Container>
   );
