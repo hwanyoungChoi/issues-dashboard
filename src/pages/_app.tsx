@@ -1,7 +1,9 @@
 import { HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
 import Head from "next/head";
-
 import "@/styles/globals.css";
+import { Suspense } from "react";
+
+import Loading from "@/components/common/Loading";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import queryClient from "@/lib/api/queryClient";
 
@@ -18,7 +20,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <HydrationBoundary state={pageProps.dehydratedState}>
           <DashboardLayout>
-            <Component {...pageProps} />
+            <Suspense fallback={<Loading />}>
+              <Component {...pageProps} />
+            </Suspense>
           </DashboardLayout>
         </HydrationBoundary>
       </QueryClientProvider>
