@@ -7,7 +7,6 @@ import Input from "@/components/common/Input";
 import Loading from "@/components/common/Loading";
 import Pagination from "@/components/common/Pagination";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
-import { useGetIssues } from "@/hooks/queries/useGetIssues";
 import { useGetSearchIssues } from "@/hooks/queries/useGetSearchIssues";
 import { useQueryString } from "@/hooks/useQueryString";
 import { PATHS } from "@/lib/constants/routes";
@@ -17,6 +16,8 @@ import * as S from "./IssuesListView.styled";
 import CardTypeList from "../../components/CardTypeList";
 import { MoreAction } from "../../components/ListMoreDropDown";
 import TableTypeList from "../../components/TableTypeList";
+
+const MAX_PER_PAGE = 10;
 
 export default function IssuesListView() {
   const router = useRouter();
@@ -34,28 +35,19 @@ export default function IssuesListView() {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data: issues, isLoading } = useGetIssues({
+  const { data: issues, isLoading } = useGetSearchIssues({
     owner: process.env.NEXT_PUBLIC_OWNER!,
     repo: process.env.NEXT_PUBLIC_REPO!,
+    title: search,
     page: Number(page),
-    per_page: 10,
+    per_page: MAX_PER_PAGE,
   });
-
-  const { data: issuesDataBySearch, isLoading: isSearching } =
-    useGetSearchIssues({
-      owner: process.env.NEXT_PUBLIC_OWNER!,
-      repo: process.env.NEXT_PUBLIC_REPO!,
-      title: search,
-      page: Number(page),
-      per_page: 10,
-    });
 
   const { mutateAsync: patchIssueAsync, isPending: isPatching } =
     usePatchIssue();
 
-  const issueList = search ? issuesDataBySearch?.items ?? [] : issues ?? [];
-
-  const isEmptyList = Number(page) === 1 && !issueList.length;
+  const { items: issueList = [], total_count: totalCount = 0 } = issues ?? {};
+  const isEmptyList = !issueList.length;
 
   const handleDropDownClick = async (
     issueNumber: number,
@@ -81,7 +73,7 @@ export default function IssuesListView() {
     });
   };
 
-  if (isLoading || isSearching) {
+  if (isLoading) {
     return <Loading message="게시글을 불러오는 중입니다." />;
   }
   if (isPatching) {
@@ -133,7 +125,7 @@ export default function IssuesListView() {
 
         <S.ActionContainer>
           <Pagination
-            count={8}
+            count={Math.ceil(totalCount / MAX_PER_PAGE)}
             page={Number(page)}
             onPrev={() => setQueries({ page: String(Number(page) - 1) })}
             onNext={() => setQueries({ page: String(Number(page) + 1) })}
