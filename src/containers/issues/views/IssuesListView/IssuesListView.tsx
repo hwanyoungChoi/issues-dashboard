@@ -5,6 +5,7 @@ import { FormEvent, useRef } from "react";
 import { Button } from "@/components/common/Button";
 import Input from "@/components/common/Input";
 import Loading from "@/components/common/Loading";
+import Pagination from "@/components/common/Pagination";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { useGetIssues } from "@/hooks/queries/useGetIssues";
 import { useGetSearchIssues } from "@/hooks/queries/useGetSearchIssues";
@@ -131,17 +132,13 @@ export default function IssuesListView() {
         )}
 
         <S.ActionContainer>
-          {/* TODO: 페이지네이션 */}
-          <Button
-            onClick={() => setQueries({ page: String(Number(page) - 1) })}
-          >
-            전페이지
-          </Button>
-          <Button
-            onClick={() => setQueries({ page: String(Number(page) + 1) })}
-          >
-            다음페이지
-          </Button>
+          <Pagination
+            count={8}
+            page={Number(page)}
+            onPrev={() => setQueries({ page: String(Number(page) - 1) })}
+            onNext={() => setQueries({ page: String(Number(page) + 1) })}
+            onPage={(page) => setQueries({ page: String(page) })}
+          />
         </S.ActionContainer>
       </S.InnerContainer>
     </S.Container>
