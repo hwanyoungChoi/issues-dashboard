@@ -46,7 +46,46 @@ export default function IssuesEditView({ id }: Props) {
   const methods = useForm<IssueForm>({
     resolver: yupResolver(SCHEMA),
   });
-  const { handleSubmit, reset } = methods;
+  const {
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = methods;
+
+  useEffect(() => {
+    if (!isDirty) {
+      return;
+    }
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isDirty]);
+
+  useEffect(() => {
+    if (!isDirty) {
+      return;
+    }
+
+    router.beforePopState(() => {
+      if (
+        !window.confirm("작성 중인 내용이 사라집니다. 페이지 이동하시겠습니까?")
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+
+    return () => {
+      router.beforePopState(() => true);
+    };
+  }, [isDirty, router]);
 
   useEffect(() => {
     reset({
