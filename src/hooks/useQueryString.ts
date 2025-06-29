@@ -19,7 +19,10 @@ export function useQueryString({ initialQueries }: UseQueryStringProps) {
     }
   }
 
-  const setQueries = (queries: Record<string, string>, isReplace?: boolean) => {
+  const setQueries = (
+    queries: Record<string, string>,
+    isReplace?: "push" | "replace"
+  ) => {
     const route = {
       pathname: router.pathname,
       query: {
@@ -28,7 +31,7 @@ export function useQueryString({ initialQueries }: UseQueryStringProps) {
       },
     };
 
-    if (isReplace) {
+    if (isReplace === "replace") {
       router.replace(route);
       return;
     }

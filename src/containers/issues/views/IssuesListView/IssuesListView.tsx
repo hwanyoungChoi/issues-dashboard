@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import Input from "@/components/common/Input";
@@ -33,7 +33,11 @@ export default function IssuesListView() {
     },
   });
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState(search);
+
+  useEffect(() => {
+    setInputValue(search);
+  }, [search]);
 
   const { data: issues, isLoading } = useGetSearchIssues({
     owner: process.env.NEXT_PUBLIC_OWNER!,
@@ -55,7 +59,10 @@ export default function IssuesListView() {
   ) => {
     if (action === MoreAction.Update) {
       await router.push(`${PATHS.ISSUES_EDIT}/${issueNumber}`);
-    } else if (action === MoreAction.Delete) {
+      return;
+    }
+
+    if (action === MoreAction.Delete) {
       await patchIssueAsync({
         owner: process.env.NEXT_PUBLIC_OWNER!,
         repo: process.env.NEXT_PUBLIC_REPO!,
@@ -69,7 +76,7 @@ export default function IssuesListView() {
     e.preventDefault();
     setQueries({
       page: "1", // 검색 시에는 1페이지부터 다시 조회
-      search: inputRef.current?.value.trim() ?? "",
+      search: inputValue.trim() ?? "",
     });
   };
 
@@ -88,9 +95,9 @@ export default function IssuesListView() {
         <div>
           <form onSubmit={handleSearch}>
             <Input
-              ref={inputRef}
               type="text"
-              defaultValue={search}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
               placeholder="검색어를 입력하세요."
               hasSubmitButton
               submitButtonLabel="🔍"
