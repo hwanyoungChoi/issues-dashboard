@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import Head from "next/head";
 import "@/styles/globals.css";
+import { useRouter } from "next/router";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -17,6 +18,8 @@ import queryClient from "@/lib/api/queryClient";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -31,6 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
               {({ reset }) => (
                 <ErrorBoundary
                   onReset={reset}
+                  resetKeys={[router.asPath]}
                   FallbackComponent={ErrorFallback}
                 >
                   <Suspense fallback={<Loading />}>
