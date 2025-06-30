@@ -12,14 +12,12 @@ import { usePostIssue } from "@/hooks/mutations/usePostIssue";
 import { useGetIssue } from "@/hooks/queries/useGetIssue";
 import useModal from "@/hooks/useModal";
 import { PATHS } from "@/lib/constants/routes";
+import { TIssue } from "@/types/issue";
 
 import * as S from "./IssuesEditView.styled";
 import FormFields from "../../components/FormFields";
 
-interface IssueForm {
-  title: string;
-  body: string;
-}
+type TIssueForm = Pick<TIssue, "title" | "body">;
 
 const SCHEMA = yup.object().shape({
   title: yup.string().required("타이틀을 입력해주세요."),
@@ -45,7 +43,7 @@ export default function IssuesEditView({ id }: Props) {
   const { mutateAsync: patchIssueAsync, isPending: isPatching } =
     usePatchIssue();
 
-  const methods = useForm<IssueForm>({
+  const methods = useForm<TIssueForm>({
     resolver: yupResolver(SCHEMA),
   });
   const {
@@ -114,7 +112,7 @@ export default function IssuesEditView({ id }: Props) {
     });
   }, [issue, reset]);
 
-  const onCreate = async (data: IssueForm) => {
+  const onCreate = async (data: TIssueForm) => {
     await postIssueAsync({
       owner: process.env.NEXT_PUBLIC_OWNER!,
       repo: process.env.NEXT_PUBLIC_REPO!,
@@ -125,7 +123,7 @@ export default function IssuesEditView({ id }: Props) {
     router.replace(PATHS.ISSUES);
   };
 
-  const onUpdate = async (data: IssueForm) => {
+  const onUpdate = async (data: TIssueForm) => {
     await patchIssueAsync({
       owner: process.env.NEXT_PUBLIC_OWNER!,
       repo: process.env.NEXT_PUBLIC_REPO!,
