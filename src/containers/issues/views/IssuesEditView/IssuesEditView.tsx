@@ -81,12 +81,10 @@ export default function IssuesEditView({ id }: Props) {
         closeModal();
         if (pendingUrlRef.current) {
           router.push(pendingUrlRef.current);
-          pendingUrlRef.current = null;
         }
       },
       close: () => {
         closeModal();
-        pendingUrlRef.current = null;
       },
     },
   });
@@ -97,7 +95,9 @@ export default function IssuesEditView({ id }: Props) {
     }
 
     router.beforePopState(({ url }) => {
-      pendingUrlRef.current = url;
+      if (!pendingUrlRef.current) {
+        pendingUrlRef.current = url;
+      }
       openModal();
       return false;
     });
