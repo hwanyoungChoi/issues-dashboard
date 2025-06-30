@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 
+import { Z_INDEX } from "@/lib/constants/styles";
+
 export const Container = styled.div`
-  z-index: 10000;
+  z-index: ${Z_INDEX.MODAL};
   position: fixed;
   top: 0;
   left: 0;
