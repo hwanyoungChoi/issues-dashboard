@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker:build": "docker build -t dashboard .",
+    "docker:run": "docker run -p 3000:3000 dashboard"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -135,8 +135,8 @@ $ npm run dev
 
 ```bash
 # 도커 이미지 빌드 및 실행
-$ docker build -t dashboard .
-$ docker run -d -p 3000:3000 dashboard
+$ npm run docker:build
+$ npm run docker:run
 ```
 
 **접속 URL**: http://localhost:3000/
