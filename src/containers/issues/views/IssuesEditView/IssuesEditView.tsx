@@ -39,9 +39,16 @@ export default function IssuesEditView({ id }: Props) {
     issue_number: id!,
   });
 
-  const { mutateAsync: postIssueAsync, isPending: isPosting } = usePostIssue();
-  const { mutateAsync: patchIssueAsync, isPending: isPatching } =
-    usePatchIssue();
+  const onSuccess = () => {
+    router.replace(PATHS.ISSUES);
+  };
+
+  const { mutate: postIssue, isPending: isPosting } = usePostIssue({
+    onSuccess,
+  });
+  const { mutate: patchIssue, isPending: isPatching } = usePatchIssue({
+    onSuccess,
+  });
 
   const methods = useForm<TIssueForm>({
     resolver: yupResolver(SCHEMA),
@@ -112,27 +119,23 @@ export default function IssuesEditView({ id }: Props) {
     });
   }, [issue, reset]);
 
-  const onCreate = async (data: TIssueForm) => {
-    await postIssueAsync({
+  const onCreate = (data: TIssueForm) => {
+    postIssue({
       owner: process.env.NEXT_PUBLIC_OWNER!,
       repo: process.env.NEXT_PUBLIC_REPO!,
       title: data.title,
       body: data.body,
     });
-
-    router.replace(PATHS.ISSUES);
   };
 
-  const onUpdate = async (data: TIssueForm) => {
-    await patchIssueAsync({
+  const onUpdate = (data: TIssueForm) => {
+    patchIssue({
       owner: process.env.NEXT_PUBLIC_OWNER!,
       repo: process.env.NEXT_PUBLIC_REPO!,
       issue_number: id!,
       title: data.title,
       body: data.body,
     });
-
-    router.replace(PATHS.ISSUES);
   };
 
   if (isLoading) {

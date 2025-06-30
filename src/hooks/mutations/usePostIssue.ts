@@ -1,11 +1,14 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
-import { postIssue, PostIssueParams } from "@/lib/api";
+import { postIssue, PostIssueParams, PostIssueResponse } from "@/lib/api";
 
 export type UsePostIssueProps = PostIssueParams;
 
-export const usePostIssue = () => {
+export const usePostIssue = (
+  options?: UseMutationOptions<PostIssueResponse, Error, UsePostIssueProps>
+) => {
   return useMutation({
+    ...options,
     mutationFn: (params: UsePostIssueProps) => postIssue(params),
   });
 };
