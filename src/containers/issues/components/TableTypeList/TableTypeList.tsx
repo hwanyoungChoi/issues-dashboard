@@ -3,12 +3,13 @@ import Link from "next/link";
 
 import { DATE_FORMAT } from "@/lib/constants/date";
 import { PATHS } from "@/lib/constants/routes";
+import { TIssue } from "@/types/issue";
 
 import * as S from "./TableTypeList.styled";
 import ListMoreDropDown, { MoreAction } from "../ListMoreDropDown";
 
 interface Props {
-  issues: any[];
+  issues: TIssue[];
   onDropDownClick: (issueNumber: number, action: MoreAction) => void;
 }
 

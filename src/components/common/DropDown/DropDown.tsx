@@ -2,26 +2,26 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 
 import * as S from "./DropDown.styled";
 
-interface DropDownMenuItem {
+interface DropDownMenuItem<T> {
   label: string | ReactNode;
-  value: any;
+  value: T;
 }
 
-interface Props {
+interface Props<T> {
   buttonLabel: string | ReactNode;
-  items: DropDownMenuItem[];
+  items: DropDownMenuItem<T>[];
   direction?: "left" | "right";
-  selectedValue?: any;
-  onClick: (value: any) => void;
+  selectedValue?: T;
+  onClick: (value: T) => void;
 }
 
-export default function DropDown({
+export default function DropDown<T>({
   buttonLabel,
   items,
   direction = "right",
   selectedValue,
   onClick,
-}: Props) {
+}: Props<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const isShowRadio = !!selectedValue;
 
@@ -48,7 +48,7 @@ export default function DropDown({
     };
   }, [isOpen]);
 
-  const handleMenuItemClick = (value: any) => {
+  const handleMenuItemClick = (value: T) => {
     onClick(value);
     setIsOpen(false);
   };
@@ -64,7 +64,7 @@ export default function DropDown({
           <S.MenuList>
             {items.map((item) => (
               <li
-                key={item.value}
+                key={item.value as string}
                 onClick={() => handleMenuItemClick(item.value)}
               >
                 {isShowRadio && (
