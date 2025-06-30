@@ -5,30 +5,30 @@ export interface ModalProps {
   close?: (payload?: any) => void;
 }
 
-export interface Modal {
+export interface ModalState {
   key: string;
   modal: (props: ModalProps) => ReactNode;
   props: ModalProps;
 }
 
 export interface ModalStore {
-  modals: Modal[];
-  openModal: (modals: Modal[]) => void;
+  modalStates: ModalState[];
+  openModal: (modalStates: ModalState[]) => void;
   closeModal: () => void;
   closeAllModal: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
-  modals: [],
+  modalStates: [],
   openModal: (modals) => {
     set((state) => ({
-      modals: [...state.modals, ...modals],
+      modalStates: [...state.modalStates, ...modals],
     }));
   },
   closeModal: () => {
-    set((state) => ({ modals: state.modals.slice(0, -1) }));
+    set((state) => ({ modalStates: state.modalStates.slice(0, -1) }));
   },
   closeAllModal: () => {
-    set({ modals: [] });
+    set({ modalStates: [] });
   },
 }));

@@ -5,7 +5,7 @@ import { useModalStore } from "@/store/useModalStore";
 import * as S from "./ModalContainer.styled";
 
 export default function ModalContainer() {
-  const modals = useModalStore((state) => state.modals);
+  const modalStates = useModalStore((state) => state.modalStates);
 
   useEffect(() => {
     window.document.body.style.overflow = "hidden";
@@ -15,14 +15,14 @@ export default function ModalContainer() {
     };
   }, []);
 
-  if (!modals.length) {
+  if (!modalStates.length) {
     return null;
   }
 
   return (
     <S.Container>
-      {modals.map((modal, index) => (
-        <S.Modal key={index}>{modal.modal(modal.props)}</S.Modal>
+      {modalStates.map((modalState, index) => (
+        <S.Modal key={index}>{modalState.modal(modalState.props)}</S.Modal>
       ))}
     </S.Container>
   );
