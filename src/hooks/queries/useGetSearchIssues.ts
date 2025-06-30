@@ -2,6 +2,8 @@ import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
 import { GetSearchIssuesResponse, searchIssues } from "@/lib/api";
 
+export const GET_SEARCH_ISSUES_QUERY_KEY = "get-search-issues";
+
 export interface UseGetSearchIssuesProps {
   owner: string;
   repo: string;
@@ -29,7 +31,7 @@ export const useGetSearchIssues = (
 
   return useQuery({
     ...options,
-    queryKey: ["get-search-issues", q, page, per_page],
+    queryKey: [GET_SEARCH_ISSUES_QUERY_KEY, q, page, per_page],
     queryFn: () => searchIssues({ q, page, per_page }),
     select: (res) => res?.data,
   });
