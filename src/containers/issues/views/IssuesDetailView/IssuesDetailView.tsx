@@ -6,6 +6,8 @@ import { Button } from "@/components/common/Button";
 import Loading from "@/components/common/Loading";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { useGetIssue } from "@/hooks/queries/useGetIssue";
+import { GET_SEARCH_ISSUES_QUERY_KEY } from "@/hooks/queries/useGetSearchIssues";
+import queryClient from "@/lib/api/queryClient";
 import { DATE_FORMAT } from "@/lib/constants/date";
 import { PATHS } from "@/lib/constants/routes";
 
@@ -28,7 +30,10 @@ export default function IssuesDetailView({ id }: Props) {
   });
 
   const { mutate: patchIssue, isPending: isPatching } = usePatchIssue({
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [GET_SEARCH_ISSUES_QUERY_KEY],
+      });
       router.replace(PATHS.ISSUES);
     },
   });

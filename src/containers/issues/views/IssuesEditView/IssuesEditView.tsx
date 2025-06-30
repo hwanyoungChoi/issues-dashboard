@@ -10,7 +10,9 @@ import ConfirmModal from "@/components/modals/ConfirmModal";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { usePostIssue } from "@/hooks/mutations/usePostIssue";
 import { useGetIssue } from "@/hooks/queries/useGetIssue";
+import { GET_SEARCH_ISSUES_QUERY_KEY } from "@/hooks/queries/useGetSearchIssues";
 import useModal from "@/hooks/useModal";
+import queryClient from "@/lib/api/queryClient";
 import { PATHS } from "@/lib/constants/routes";
 import { TIssue } from "@/types/issue";
 
@@ -39,7 +41,10 @@ export default function IssuesEditView({ id }: Props) {
     issue_number: id!,
   });
 
-  const onSuccess = () => {
+  const onSuccess = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: [GET_SEARCH_ISSUES_QUERY_KEY],
+    });
     router.replace(PATHS.ISSUES);
   };
 

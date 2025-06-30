@@ -7,8 +7,12 @@ import Input from "@/components/common/Input";
 import Loading from "@/components/common/Loading";
 import Pagination from "@/components/common/Pagination";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
-import { useGetSearchIssues } from "@/hooks/queries/useGetSearchIssues";
+import {
+  GET_SEARCH_ISSUES_QUERY_KEY,
+  useGetSearchIssues,
+} from "@/hooks/queries/useGetSearchIssues";
 import { useQueryString } from "@/hooks/useQueryString";
+import queryClient from "@/lib/api/queryClient";
 import { PATHS } from "@/lib/constants/routes";
 import { useAppStore } from "@/store/useAppStore";
 
@@ -47,7 +51,13 @@ export default function IssuesListView() {
     per_page: MAX_PER_PAGE,
   });
 
-  const { mutate: patchIssue, isPending: isPatching } = usePatchIssue();
+  const { mutate: patchIssue, isPending: isPatching } = usePatchIssue({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [GET_SEARCH_ISSUES_QUERY_KEY],
+      });
+    },
+  });
 
   const { items: issueList = [], total_count: totalCount = 0 } = issues ?? {};
   const isEmptyList = !issueList.length;
