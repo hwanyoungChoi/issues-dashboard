@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import Input from "@/components/common/Input";
@@ -52,21 +52,24 @@ export default function IssuesListView() {
   const { items: issueList = [], total_count: totalCount = 0 } = issues ?? {};
   const isEmptyList = !issueList.length;
 
-  const handleDropDownClick = (issueNumber: number, action: MoreAction) => {
-    if (action === MoreAction.Update) {
-      router.push(`${PATHS.ISSUES_EDIT}/${issueNumber}`);
-      return;
-    }
+  const handleDropDownClick = useCallback(
+    (issueNumber: number, action: MoreAction) => {
+      if (action === MoreAction.Update) {
+        router.push(`${PATHS.ISSUES_EDIT}/${issueNumber}`);
+        return;
+      }
 
-    if (action === MoreAction.Delete) {
-      patchIssue({
-        owner: process.env.NEXT_PUBLIC_OWNER!,
-        repo: process.env.NEXT_PUBLIC_REPO!,
-        issue_number: issueNumber,
-        state: "closed",
-      });
-    }
-  };
+      if (action === MoreAction.Delete) {
+        patchIssue({
+          owner: process.env.NEXT_PUBLIC_OWNER!,
+          repo: process.env.NEXT_PUBLIC_REPO!,
+          issue_number: issueNumber,
+          state: "closed",
+        });
+      }
+    },
+    [patchIssue, router]
+  );
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

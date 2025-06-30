@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useMemo } from "react";
 
 interface UseQueryStringProps {
   initialQueries: Record<string, string>;
@@ -7,17 +8,20 @@ interface UseQueryStringProps {
 export function useQueryString({ initialQueries }: UseQueryStringProps) {
   const router = useRouter();
 
-  const queries: Record<string, string> = {};
-  for (const key in initialQueries) {
-    const value = router.query[key];
-    if (typeof value === "string") {
-      queries[key] = value;
-    } else if (Array.isArray(value)) {
-      queries[key] = value[0] ?? initialQueries[key];
-    } else {
-      queries[key] = initialQueries[key];
+  const queries = useMemo(() => {
+    const result: Record<string, string> = {};
+    for (const key in initialQueries) {
+      const value = router.query[key];
+      if (typeof value === "string") {
+        result[key] = value;
+      } else if (Array.isArray(value)) {
+        result[key] = value[0] ?? initialQueries[key];
+      } else {
+        result[key] = initialQueries[key];
+      }
     }
-  }
+    return result;
+  }, [router.query, initialQueries]);
 
   const setQueries = (
     queries: Record<string, string>,
