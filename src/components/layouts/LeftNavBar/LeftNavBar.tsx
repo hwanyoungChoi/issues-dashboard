@@ -23,7 +23,7 @@ export default function LeftNavBar() {
       return currentPath === path;
     }
 
-    return currentPath.startsWith(path);
+    return currentPath ? currentPath.startsWith(path) : false;
   };
 
   return (
