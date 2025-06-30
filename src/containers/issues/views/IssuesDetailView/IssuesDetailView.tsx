@@ -47,7 +47,7 @@ export default function IssuesDetailView({ id }: Props) {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || !issue) {
     return <Loading message="게시글을 불러오는 중입니다." />;
   }
   if (isPatching) {
