@@ -1,14 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import { Button } from "@/components/common/Button";
 import Loading from "@/components/common/Loading";
+import ConfirmModal from "@/components/modals/ConfirmModal";
 import { usePatchIssue } from "@/hooks/mutations/usePatchIssue";
 import { usePostIssue } from "@/hooks/mutations/usePostIssue";
 import { useGetIssue } from "@/hooks/queries/useGetIssue";
+import useModal from "@/hooks/useModal";
 import { PATHS } from "@/lib/constants/routes";
 
 import * as S from "./IssuesEditView.styled";
@@ -67,25 +69,43 @@ export default function IssuesEditView({ id }: Props) {
     };
   }, [isDirty]);
 
+  const pendingUrlRef = useRef<string | null>(null);
+
+  const { openModal, closeModal } = useModal({
+    key: "confirm-modal",
+    modal: ConfirmModal,
+    props: {
+      title: "안내",
+      content: "작성 중인 내용이 사라집니다.\n페이지 이동하시겠습니까?",
+      ok: () => {
+        closeModal();
+        if (pendingUrlRef.current) {
+          router.push(pendingUrlRef.current);
+          pendingUrlRef.current = null;
+        }
+      },
+      close: () => {
+        closeModal();
+        pendingUrlRef.current = null;
+      },
+    },
+  });
+
   useEffect(() => {
     if (!isDirty) {
       return;
     }
 
-    router.beforePopState(() => {
-      if (
-        !window.confirm("작성 중인 내용이 사라집니다. 페이지 이동하시겠습니까?")
-      ) {
-        return false;
-      }
-
-      return true;
+    router.beforePopState(({ url }) => {
+      pendingUrlRef.current = url;
+      openModal();
+      return false;
     });
 
     return () => {
       router.beforePopState(() => true);
     };
-  }, [isDirty, router]);
+  }, [isDirty, openModal, router]);
 
   useEffect(() => {
     reset({

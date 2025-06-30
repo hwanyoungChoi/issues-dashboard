@@ -9,6 +9,7 @@ export const Title = styled.div`
 
 export const Content = styled.div`
   padding: 50px 0;
+  white-space: pre-line;
 `;
 
 export const ActionContainer = styled.div`
