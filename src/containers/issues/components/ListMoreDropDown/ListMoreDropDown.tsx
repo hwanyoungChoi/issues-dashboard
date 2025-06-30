@@ -1,6 +1,8 @@
 import Image from "next/image";
 
 import DropDown from "@/components/common/DropDown";
+import ConfirmModal from "@/components/modals/ConfirmModal";
+import useModal from "@/hooks/useModal";
 
 export const enum MoreAction {
   Update,
@@ -12,6 +14,22 @@ interface Props {
 }
 
 export default function ListMoreDropDown({ onClick }: Props) {
+  const { openModal, closeModal } = useModal({
+    key: "confirm-modal",
+    modal: ConfirmModal,
+    props: {
+      title: "게시글 삭제",
+      content: "게시글을 삭제하시겠습니까?",
+      ok: () => {
+        onClick(MoreAction.Delete);
+        closeModal();
+      },
+      close: () => closeModal(),
+      okButtonText: "삭제",
+      cancelButtonText: "취소",
+    },
+  });
+
   return (
     <DropDown
       buttonLabel={
@@ -28,10 +46,8 @@ export default function ListMoreDropDown({ onClick }: Props) {
       ]}
       onClick={(action) => {
         if (action === MoreAction.Delete) {
-          // TODO: modal 컴포넌트
-          if (!window.confirm("게시글을 삭제하시겠습니까?")) {
-            return;
-          }
+          openModal();
+          return;
         }
 
         onClick(action);
