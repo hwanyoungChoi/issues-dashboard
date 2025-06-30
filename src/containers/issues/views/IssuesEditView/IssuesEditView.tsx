@@ -43,11 +43,17 @@ export default function IssuesEditView({ id }: Props) {
     router.replace(PATHS.ISSUES);
   };
 
+  const onError = () => {
+    window.alert("에러가 발생했습니다.");
+  };
+
   const { mutate: postIssue, isPending: isPosting } = usePostIssue({
     onSuccess,
+    onError,
   });
   const { mutate: patchIssue, isPending: isPatching } = usePatchIssue({
     onSuccess,
+    onError,
   });
 
   const methods = useForm<TIssueForm>({
