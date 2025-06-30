@@ -7,15 +7,19 @@ import * as S from "./ModalContainer.styled";
 export default function ModalContainer() {
   const modalStates = useModalStore((state) => state.modalStates);
 
+  const hasModal = !!modalStates.length;
+
   useEffect(() => {
-    window.document.body.style.overflow = "hidden";
+    if (hasModal) {
+      window.document.body.style.overflow = "hidden";
+    }
 
     return () => {
       window.document.body.style.overflow = "";
     };
-  }, []);
+  }, [hasModal]);
 
-  if (!modalStates.length) {
+  if (!hasModal) {
     return null;
   }
 
