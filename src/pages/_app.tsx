@@ -1,8 +1,14 @@
-import { HydrationBoundary, QueryClientProvider } from "@tanstack/react-query";
+import {
+  HydrationBoundary,
+  QueryClientProvider,
+  QueryErrorResetBoundary,
+} from "@tanstack/react-query";
 import Head from "next/head";
 import "@/styles/globals.css";
 import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
+import ErrorFallback from "@/components/common/ErrorFallback";
 import Loading from "@/components/common/Loading";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import ModalContainer from "@/components/modals/ModalContainer";
@@ -21,9 +27,18 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <HydrationBoundary state={pageProps.dehydratedState}>
           <DashboardLayout>
-            <Suspense fallback={<Loading />}>
-              <Component {...pageProps} />
-            </Suspense>
+            <QueryErrorResetBoundary>
+              {({ reset }) => (
+                <ErrorBoundary
+                  onReset={reset}
+                  FallbackComponent={ErrorFallback}
+                >
+                  <Suspense fallback={<Loading />}>
+                    <Component {...pageProps} />
+                  </Suspense>
+                </ErrorBoundary>
+              )}
+            </QueryErrorResetBoundary>
           </DashboardLayout>
         </HydrationBoundary>
 
