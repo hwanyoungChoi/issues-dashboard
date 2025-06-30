@@ -1,6 +1,6 @@
 import { ModalState, useModalStore } from "@/store/useModalStore";
 
-export default function useModal({ key, modal, props }: ModalState) {
+export default function useModal({ key, modal, props }: ModalState<any>) {
   const openModal = useModalStore((state) => state.openModal);
   const closeModal = useModalStore((state) => state.closeModal);
   const closeAllModal = useModalStore((state) => state.closeAllModal);

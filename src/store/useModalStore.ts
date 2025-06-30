@@ -2,18 +2,18 @@ import { ReactNode } from "react";
 import { create } from "zustand";
 
 export interface ModalProps {
-  close?: (payload?: any) => void;
+  close?: () => void;
 }
 
-export interface ModalState {
+export interface ModalState<BaseProps extends ModalProps> {
   key: string;
-  modal: (props: ModalProps) => ReactNode;
-  props: ModalProps;
+  modal: (props: BaseProps) => ReactNode;
+  props: BaseProps;
 }
 
 export interface ModalStore {
-  modalStates: ModalState[];
-  openModal: (modalStates: ModalState[]) => void;
+  modalStates: ModalState<ModalProps>[];
+  openModal: (modalStates: ModalState<ModalProps>[]) => void;
   closeModal: () => void;
   closeAllModal: () => void;
 }
