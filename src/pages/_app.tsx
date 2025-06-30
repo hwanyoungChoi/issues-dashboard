@@ -5,6 +5,7 @@ import { Suspense } from "react";
 
 import Loading from "@/components/common/Loading";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
+import ModalContainer from "@/components/modals/ModalContainer";
 import queryClient from "@/lib/api/queryClient";
 
 import type { AppProps } from "next/app";
@@ -25,6 +26,8 @@ export default function App({ Component, pageProps }: AppProps) {
             </Suspense>
           </DashboardLayout>
         </HydrationBoundary>
+
+        <ModalContainer />
       </QueryClientProvider>
     </>
   );
