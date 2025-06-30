@@ -27,23 +27,26 @@ export default function IssuesDetailView({ id }: Props) {
     issue_number: id,
   });
 
-  const { mutateAsync: patchIssueAsync, isPending: isPatching } =
-    usePatchIssue();
+  const { mutate: patchIssue, isPending: isPatching } = usePatchIssue({
+    onSuccess: () => {
+      router.replace(PATHS.ISSUES);
+    },
+  });
 
   const { title, created_at, body } = issue ?? {};
 
-  const handleDropDownClick = async (action: MoreAction) => {
+  const handleDropDownClick = (action: MoreAction) => {
     if (action === MoreAction.Update) {
-      await router.push(`${PATHS.ISSUES_EDIT}/${id}`);
-    } else if (action === MoreAction.Delete) {
-      await patchIssueAsync({
+      router.push(`${PATHS.ISSUES_EDIT}/${id}`);
+      return;
+    }
+    if (action === MoreAction.Delete) {
+      patchIssue({
         owner: process.env.NEXT_PUBLIC_OWNER!,
         repo: process.env.NEXT_PUBLIC_REPO!,
         issue_number: id,
         state: "closed",
       });
-
-      await router.replace(PATHS.ISSUES);
     }
   };
 

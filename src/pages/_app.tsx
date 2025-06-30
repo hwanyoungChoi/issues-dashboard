@@ -6,11 +6,9 @@ import {
 import Head from "next/head";
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
-import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import ErrorFallback from "@/components/common/ErrorFallback";
-import Loading from "@/components/common/Loading";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import ModalContainer from "@/components/modals/ModalContainer";
 import queryClient from "@/lib/api/queryClient";
@@ -37,9 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   resetKeys={[router.asPath]}
                   FallbackComponent={ErrorFallback}
                 >
-                  <Suspense fallback={<Loading />}>
-                    <Component {...pageProps} />
-                  </Suspense>
+                  <Component {...pageProps} />
                 </ErrorBoundary>
               )}
             </QueryErrorResetBoundary>

@@ -47,23 +47,19 @@ export default function IssuesListView() {
     per_page: MAX_PER_PAGE,
   });
 
-  const { mutateAsync: patchIssueAsync, isPending: isPatching } =
-    usePatchIssue();
+  const { mutate: patchIssue, isPending: isPatching } = usePatchIssue();
 
   const { items: issueList = [], total_count: totalCount = 0 } = issues ?? {};
   const isEmptyList = !issueList.length;
 
-  const handleDropDownClick = async (
-    issueNumber: number,
-    action: MoreAction
-  ) => {
+  const handleDropDownClick = (issueNumber: number, action: MoreAction) => {
     if (action === MoreAction.Update) {
-      await router.push(`${PATHS.ISSUES_EDIT}/${issueNumber}`);
+      router.push(`${PATHS.ISSUES_EDIT}/${issueNumber}`);
       return;
     }
 
     if (action === MoreAction.Delete) {
-      await patchIssueAsync({
+      patchIssue({
         owner: process.env.NEXT_PUBLIC_OWNER!,
         repo: process.env.NEXT_PUBLIC_REPO!,
         issue_number: issueNumber,
