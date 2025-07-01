@@ -41,11 +41,11 @@ export default function IssuesEditView({ id }: Props) {
     issue_number: id!,
   });
 
-  const onSuccess = async () => {
+  const onSuccess = async ({ data }: { data: TIssue }) => {
     await queryClient.invalidateQueries({
       queryKey: [GET_SEARCH_ISSUES_QUERY_KEY],
     });
-    router.replace(PATHS.ISSUES);
+    router.replace(`${PATHS.ISSUES}/${data.number}`);
   };
 
   const onError = () => {
