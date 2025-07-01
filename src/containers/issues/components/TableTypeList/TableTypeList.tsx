@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import Link from "next/link";
 
 import { DATE_FORMAT } from "@/lib/constants/date";
 import { PATHS } from "@/lib/constants/routes";
@@ -33,13 +32,20 @@ export default function TableTypeList({ issues, onDropDownClick }: Props) {
         </tr>
       </thead>
       <tbody>
-        {issues.map((issue) => (
+        {issues.map((issue: TIssue) => (
           <tr key={issue.id}>
             <td>{issue.number}</td>
             <td>
-              <Link href={`${PATHS.ISSUES}/${issue.number}`}>
+              <S.Title
+                href={
+                  issue.state === "open"
+                    ? `${PATHS.ISSUES}/${issue.number}`
+                    : ""
+                }
+                state={issue.state}
+              >
                 {issue.title}
-              </Link>
+              </S.Title>
             </td>
             <td>{issue.user?.login}</td>
             <td>
@@ -48,6 +54,7 @@ export default function TableTypeList({ issues, onDropDownClick }: Props) {
             <td>
               <ListMoreDropDown
                 onClick={(action) => onDropDownClick(issue.number, action)}
+                disabled={issue.state !== "open"}
               />
             </td>
           </tr>

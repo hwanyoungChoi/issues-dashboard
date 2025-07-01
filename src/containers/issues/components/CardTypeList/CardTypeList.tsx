@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import Link from "next/link";
 
 import { DATE_FORMAT } from "@/lib/constants/date";
 import { PATHS } from "@/lib/constants/routes";
@@ -16,10 +15,17 @@ interface Props {
 export default function CardTypeList({ issues, onDropDownClick }: Props) {
   return (
     <S.Grid>
-      {issues.map((issue) => (
+      {issues.map((issue: TIssue) => (
         <S.Card key={issue.id}>
           <S.CardTitle>
-            <Link href={`${PATHS.ISSUES}/${issue.number}`}>{issue.title}</Link>
+            <S.Title
+              href={
+                issue.state === "open" ? `${PATHS.ISSUES}/${issue.number}` : ""
+              }
+              state={issue.state}
+            >
+              {issue.title}
+            </S.Title>
           </S.CardTitle>
           <S.CardDetail>
             <div>{issue.user?.login}</div>
@@ -31,6 +37,7 @@ export default function CardTypeList({ issues, onDropDownClick }: Props) {
           <S.CardMoreWrapper>
             <ListMoreDropDown
               onClick={(action) => onDropDownClick(issue.number, action)}
+              disabled={issue.state !== "open"}
             />
           </S.CardMoreWrapper>
         </S.Card>

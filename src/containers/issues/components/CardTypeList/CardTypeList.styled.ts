@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import Link from "next/link";
 
 export const Grid = styled.div`
   display: grid;
@@ -23,6 +24,11 @@ export const Card = styled.div`
 
 export const CardTitle = styled.div`
   max-width: 90%;
+`;
+
+export const Title = styled(Link)<{ state: "open" | "closed" }>`
+  text-decoration: ${({ state }) =>
+    state === "open" ? "none" : "line-through"};
 `;
 
 export const CardDetail = styled.div`

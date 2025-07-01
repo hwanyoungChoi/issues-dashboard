@@ -13,6 +13,7 @@ interface Props<T> {
   direction?: "left" | "right";
   selectedValue?: T;
   onClick: (value: T) => void;
+  disabled?: boolean;
 }
 
 export default function DropDown<T>({
@@ -21,6 +22,7 @@ export default function DropDown<T>({
   direction = "right",
   selectedValue,
   onClick,
+  disabled = false,
 }: Props<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const isShowRadio = !!selectedValue;
@@ -53,9 +55,17 @@ export default function DropDown<T>({
     setIsOpen(false);
   };
 
+  const handleButtonClick = () => {
+    if (disabled) {
+      return;
+    }
+
+    setIsOpen((prev) => !prev);
+  };
+
   return (
     <S.Container ref={containerRef}>
-      <S.Button onClick={() => setIsOpen((prev) => !prev)} isActive={isOpen}>
+      <S.Button onClick={handleButtonClick} isActive={isOpen}>
         {buttonLabel}
       </S.Button>
 

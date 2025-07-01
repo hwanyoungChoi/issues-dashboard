@@ -11,9 +11,10 @@ export const enum MoreAction {
 
 interface Props {
   onClick: (action: MoreAction) => void;
+  disabled?: boolean;
 }
 
-export default function ListMoreDropDown({ onClick }: Props) {
+export default function ListMoreDropDown({ onClick, disabled = false }: Props) {
   const { openModal, closeModal } = useModal({
     key: "confirm-modal",
     modal: ConfirmModal,
@@ -32,6 +33,7 @@ export default function ListMoreDropDown({ onClick }: Props) {
 
   return (
     <DropDown
+      disabled={disabled}
       buttonLabel={
         <Image
           src="/assets/icons/ic_more.png"
